@@ -1,0 +1,39 @@
+<!doctype html>
+
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <title>WebAssembly.Table - export</title>
+  </head>
+
+  <body>
+    <script>
+      function fetchAndInstantiate(url, importObject) {
+        return fetch(url).then(response =>
+          response.arrayBuffer()
+        ).then(bytes =>
+          WebAssembly.instantiate(bytes, importObject)
+        ).then(results =>
+          results.instance
+        );
+      }    
+    
+      var table = new WebAssembly.Table({element:'anyfunc', initial:1});
+      fetchAndInstantiate('export_table.wasm', {js:{table:table}}).then(
+        function(instance) {
+          console.log(table.get(0));  //null
+
+          console.log(instance.exports);
+          console.log('instance.exports.table.length:'
+            + instance.exports.table.length);
+          for (var i = 0; i < instance.exports.table.length; i++){
+            console.log(instance.exports.table.get(i));
+            console.log(instance.exports.table.get(i)());
+          }
+         }
+      );
+    </script>
+  </body>
+
+</html>

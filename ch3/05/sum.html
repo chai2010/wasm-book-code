@@ -1,0 +1,36 @@
+<!doctype html>
+
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <title>WebAssembly.Memory - sum</title>
+  </head>
+
+  <body>
+    <script>
+      function fetchAndInstantiate(url, importObject) {
+        return fetch(url).then(response =>
+          response.arrayBuffer()
+        ).then(bytes =>
+          WebAssembly.instantiate(bytes, importObject)
+        ).then(results =>
+          results.instance
+        );
+      }
+    
+    
+      var memory = new WebAssembly.Memory({initial:1, maximum:10});
+      fetchAndInstantiate('sum.wasm', {js:{mem:memory}}).then(
+        function(instance) {
+          var i32 = new Uint32Array(memory.buffer);
+          for (var i = 0; i < 32; i++) {
+            i32[i] = i;
+          }
+          console.log(instance.exports.sum(0, 32));  //496
+        }
+      );
+    </script>
+  </body>
+
+</html>

@@ -1,0 +1,32 @@
+<!doctype html>
+
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <title>WebAssembly.Table - call_by_index</title>
+  </head>
+
+  <body>
+    <script>
+      function fetchAndInstantiate(url, importObject) {
+        return fetch(url).then(response =>
+          response.arrayBuffer()
+        ).then(bytes =>
+          WebAssembly.instantiate(bytes, importObject)
+        ).then(results =>
+          results.instance
+        );
+      }    
+
+      var table = new WebAssembly.Table({element:'anyfunc', initial:3});
+      fetchAndInstantiate('call_by_index.wasm', {js:{table:table}}).then(
+        function(instance) {
+          console.log(instance.exports.call_by_index(0, 10));
+          console.log(instance.exports.call_by_index(1, 10));
+         }
+      );
+    </script>
+  </body>
+
+</html>

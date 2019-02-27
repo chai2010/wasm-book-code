@@ -1,0 +1,32 @@
+<!doctype html>
+
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <title>WebAssembly - Memory</title>
+  </head>
+
+  <body>
+    <script>
+      function fetchAndInstantiate(url, importObject) {
+        return fetch(url).then(response =>
+          response.arrayBuffer()
+        ).then(bytes =>
+          WebAssembly.instantiate(bytes, importObject)
+        ).then(results =>
+          results.instance
+        );
+      }    
+
+      fetchAndInstantiate('grow_size.wasm').then(
+        function(instance) {
+          console.log(instance.exports.size());   //3
+		  console.log(instance.exports.grow(2));  //3
+          console.log(instance.exports.size());   //5		  
+        }
+      );
+    </script>
+  </body>
+
+</html>

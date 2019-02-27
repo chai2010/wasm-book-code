@@ -1,0 +1,2 @@
+run:
+	node hello.js

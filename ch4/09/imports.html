@@ -1,0 +1,35 @@
+<!doctype html>
+
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <title>WebAssembly - imports</title>
+  </head>
+
+  <body>
+    <script>
+      function fetchAndInstantiate(url, importObject) {
+        return fetch(url).then(response =>
+          response.arrayBuffer()
+        ).then(bytes =>
+          WebAssembly.instantiate(bytes, importObject)
+        ).then(results =>
+          results.instance
+        );
+      }
+
+      function js_print_f32(param){
+        console.log(param);
+        return param * 2.0;
+      }
+      var importObj = {js:{print_f32:js_print_f32, global_pi:3.14}};
+      fetchAndInstantiate("imports.wasm", importObj).then(
+        function(instance) {
+          console.log(instance.exports.print_pi());
+        }
+      );
+    </script>
+  </body>
+
+</html>

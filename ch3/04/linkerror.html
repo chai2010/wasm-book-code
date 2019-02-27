@@ -1,0 +1,38 @@
+<!doctype html>
+
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <title>WebAssembly LinkError</title>
+  </head>
+
+  <body>
+    <script>
+      fetch('hello.wasm').then(response =>
+        response.arrayBuffer()
+      ).then(bytes =>
+        WebAssembly.compile(bytes)
+      ).then(module =>
+	    WebAssembly.instantiate(module)  //TypeError: Imports argument must be present and must be an object
+      );
+
+      var wasmMem = new WebAssembly.Memory({initial:1});
+      function printStr(offset, length) {
+        var bytes = new Uint8Array(wasmMem.buffer, offset, length);
+        var string = new TextDecoder('utf8').decode(bytes);
+        console.log(string);
+      }
+      var importObj = { js: { /*print: printStr, */mem: wasmMem } };
+
+      fetch('hello.wasm').then(response =>
+        response.arrayBuffer()
+      ).then(bytes =>
+        WebAssembly.compile(bytes)
+      ).then(module =>
+	    WebAssembly.instantiate(module, importObj)  
+      );
+    </script>
+  </body>
+
+</html>

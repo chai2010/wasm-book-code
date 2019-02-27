@@ -1,0 +1,67 @@
+<!doctype html>
+
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <title>WebAssembly.Table - call_by_index</title>
+  </head>
+
+  <body>
+    <script>
+      function fetchAndInstantiate(url, importObject) {
+        return fetch(url).then(response =>
+          response.arrayBuffer()
+        ).then(bytes =>
+          WebAssembly.instantiate(bytes, importObject)
+        ).then(results =>
+          results.instance
+        );
+      }    
+
+      var table = new WebAssembly.Table({element:'anyfunc', initial:3});
+      var memory = new WebAssembly.Memory({initial:1});
+      fetchAndInstantiate('exceptions.wasm', {js:{table:table, mem:memory}}).then(
+        function(instance) {
+          try{
+            instance.exports.call_by_index(0)
+          }
+          catch(err){
+            console.log(err);
+          }
+          try{
+            instance.exports.call_by_index(1)
+          }
+          catch(err){
+            console.log(err);
+          }
+          try{
+            instance.exports.call_by_index(2)
+          }
+          catch(err){
+            console.log(err);
+          }
+           try{
+            instance.exports.call_by_index(3)
+          }
+          catch(err){
+            console.log(err);
+          }          
+           try{
+            instance.exports.return_i64()
+          }
+          catch(err){
+            console.log(err);
+          }
+           try{
+            instance.exports.param_i64(0)
+          }
+          catch(err){
+            console.log(err);
+          }          
+        }
+      );
+    </script>
+  </body>
+
+</html>

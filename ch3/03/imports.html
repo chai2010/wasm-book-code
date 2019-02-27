@@ -1,0 +1,26 @@
+<!doctype html>
+
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <title>WebAssembly.Module.imports</title>
+  </head>
+
+  <body>
+    <script>
+      fetch('hello.wasm').then(response =>
+        response.arrayBuffer()
+      ).then(bytes =>
+        WebAssembly.compile(bytes)
+      ).then(module =>{
+          var imports = WebAssembly.Module.imports(module);
+          for (var i in imports) {
+            console.log(imports[i]);
+          }
+        }
+      );
+    </script>
+  </body>
+
+</html>

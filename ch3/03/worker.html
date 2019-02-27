@@ -1,0 +1,27 @@
+<!doctype html>
+
+<html>
+
+	<head>
+		<meta charset="utf-8">
+		<title>WebAssembly.Module.exports</title>
+	</head>
+
+	<body>
+		<script>
+			var sub_worker = new Worker("worker.js");
+			sub_worker.onmessage = function (event) {
+				console.log(event.data);
+			}
+
+			fetch('show_me_the_answer.wasm').then(response =>
+				response.arrayBuffer()
+			).then(bytes =>
+				WebAssembly.compile(bytes)
+			).then(module =>
+				sub_worker.postMessage(module)
+			);
+		</script>
+	</body>
+
+</html>

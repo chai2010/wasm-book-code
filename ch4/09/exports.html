@@ -1,0 +1,30 @@
+<!doctype html>
+
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <title>WebAssembly - exports</title>
+  </head>
+
+  <body>
+    <script>
+      fetch("exports.wasm").then(response =>
+        response.arrayBuffer()
+      ).then(bytes =>
+        WebAssembly.instantiate(bytes)
+      ).then(results =>{
+          var exports = WebAssembly.Module.exports(results.module);
+          for (var e in exports) {
+            console.log(exports[e]);
+          }
+          console.log(results.instance.exports);
+		  console.log(results.instance.exports.wasm_func());
+		  console.log(results.instance.exports.wasm_global_pi);
+		  console.log(typeof(results.instance.exports.wasm_global_pi));
+        }
+      );
+    </script>
+  </body>
+
+</html>

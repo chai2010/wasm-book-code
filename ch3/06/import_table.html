@@ -1,0 +1,35 @@
+<!doctype html>
+
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <title>WebAssembly.Table - import</title>
+  </head>
+
+  <body>
+    <script>
+      function fetchAndInstantiate(url, importObject) {
+        return fetch(url).then(response =>
+          response.arrayBuffer()
+        ).then(bytes =>
+          WebAssembly.instantiate(bytes, importObject)
+        ).then(results =>
+          results.instance
+        );
+      }    
+    
+      var table = new WebAssembly.Table({element:'anyfunc', initial:2});
+      console.log(table);
+      console.log(table.get(0));
+      console.log(table.get(1));
+      fetchAndInstantiate('import_table.wasm', {js:{table:table}}).then(
+        function(instance) {
+          console.log(table.get(0));
+          console.log(table.get(1));
+         }
+      );
+    </script>
+  </body>
+
+</html>

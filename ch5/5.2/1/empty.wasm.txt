@@ -1,0 +1,12 @@
+0000000: 0061 736d                                 ; WASM_BINARY_MAGIC
+0000004: 0100 0000                                 ; WASM_BINARY_VERSION
+; section "name"
+0000008: 00                                        ; section code
+0000009: 00                                        ; section size (guess)
+000000a: 04                                        ; string length
+000000b: 6e61 6d65                                name  ; custom section name
+000000f: 02                                        ; local name type
+0000010: 00                                        ; subsection size (guess)
+0000011: 00                                        ; num functions
+0000010: 01                                        ; FIXUP subsection size
+0000009: 08                                        ; FIXUP section size

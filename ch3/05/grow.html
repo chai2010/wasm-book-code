@@ -1,0 +1,49 @@
+<!doctype html>
+
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <title>WebAssembly.Memory - grow</title>
+  </head>
+
+  <body>
+    <script>
+      function fetchAndInstantiate(url, importObject) {
+        return fetch(url).then(response =>
+          response.arrayBuffer()
+        ).then(bytes =>
+          WebAssembly.instantiate(bytes, importObject)
+        ).then(results =>
+          results.instance
+        );
+      }
+
+      fetchAndInstantiate('export_mem.wasm').then(
+        function(instance) {
+          instance.exports.fibonacci(10);
+          var i32 = new Uint32Array(instance.exports.memory.buffer);
+          console.log("mem size before grow():",
+              instance.exports.memory.buffer.byteLength);  //65536
+          var s = "mem content before grow():";
+          for (var i = 0; i < 10; i++) {
+            s += i32[i] + ' '
+          }
+          console.log(s);  //1 1 2 3 5 8 13 21 34 55
+          
+          instance.exports.memory.grow(99);
+          i32 = new Uint32Array(instance.exports.memory.buffer);
+          console.log("mem size after grow():",
+              instance.exports.memory.buffer.byteLength);  //6553600
+          var s = "mem content after grow():";
+          for (var i = 0; i < 10; i++) {
+            s += i32[i] + ' '
+          }
+          console.log(s);  //still 1 1 2 3 5 8 13 21 34 55
+        }
+      );
+
+    </script>
+  </body>
+
+</html>

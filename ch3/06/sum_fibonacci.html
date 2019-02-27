@@ -1,0 +1,33 @@
+<!doctype html>
+
+<html>
+
+  <head>
+    <meta charset="utf-8">
+    <title>WebAssembly.Table - export</title>
+  </head>
+
+  <body>
+    <script>
+      function fetchAndInstantiate(url, importObject) {
+        return fetch(url).then(response =>
+          response.arrayBuffer()
+        ).then(bytes =>
+          WebAssembly.instantiate(bytes, importObject)
+        ).then(results =>
+          results.instance
+        );
+      }    
+
+      var memory = new WebAssembly.Memory({initial:1, maximum:10});
+      var table = new WebAssembly.Table({element:'anyfunc', initial:2});
+      Promise.all([
+        fetchAndInstantiate('sumfib.wasm', {js:{table:table, mem:memory}}),
+        fetchAndInstantiate('fibonacci.wasm', {js:{table:table, mem:memory}})
+        ]).then(function(results) {
+          console.log(results[0].exports.sumfib(10));
+      });
+    </script>
+  </body>
+
+</html>

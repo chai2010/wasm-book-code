@@ -1,0 +1,12 @@
+0000000: 0061 736d                                 ; WASM_BINARY_MAGIC
+0000004: 0100 0000                                 ; WASM_BINARY_VERSION
+; section "Global" (6)
+0000008: 06                                        ; section code
+0000009: 00                                        ; section size (guess)
+000000a: 01                                        ; num globals
+000000b: 7f                                        ; i32
+000000c: 00                                        ; global mutability
+000000d: 41                                        ; i32.const
+000000e: 01                                        ; i32 literal
+000000f: 0b                                        ; end
+0000009: 06                                        ; FIXUP section size
